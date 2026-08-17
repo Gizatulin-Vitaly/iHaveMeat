@@ -152,7 +152,7 @@ fun DishListScreen(onSelect: (String) -> Unit) {
                                     isChecking = true
                                     updateManager.checkForUpdates(
                                         repoPath = "Gizatulin-Vitaly/iHaveMeat", 
-                                        currentVersionName = "1.0.5",
+                                        currentVersionName = "1.0.6",
                                         onUpdateAvailable = { name, url ->
                                             isChecking = false
                                             updateInfo = UpdateInfo(name, url)

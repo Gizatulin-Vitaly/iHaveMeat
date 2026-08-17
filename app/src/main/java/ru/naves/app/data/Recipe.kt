@@ -284,62 +284,76 @@ val recipes: List<Recipe> = listOf(
         )
     ),
     Recipe(
-        id = "profiteroles",
-        name = "Профитроли",
-        subtitle = "Нежные пирожные со сливочным кремом",
-        time = "60 мин",
-        baseServings = 20,
-        baseMince = 250.0, // Base is water amount for dough scaling
+        id = "pork_roast",
+        name = "Жаркое из свинины",
+        subtitle = "Сытное блюдо с картофелем и овощами",
+        time = "70 мин",
+        baseServings = 4,
+        baseMince = 600.0,
         groups = listOf(
             IngredientGroup(
-                id = "choux_pastry",
-                label = "Заварное тесто",
-                icon = Icons.Filled.BakeryDining,
-                color = NavesColors.honey,
+                id = "pork_main",
+                label = "Мясо",
+                icon = Icons.Filled.LunchDining,
+                color = NavesColors.tomato,
                 items = listOf(
-                    Ingredient(id = "water_choux", name = "Вода", base = 250.0, unit = "мл", isBase = true),
-                    Ingredient(id = "butter", name = "Сливочное масло", base = 100.0, unit = "г"),
-                    Ingredient(id = "flour_choux", name = "Мука пшеничная", base = 150.0, unit = "г"),
-                    Ingredient(id = "eggs", name = "Яйца", base = 4.0, unit = "шт", fixed = true),
-                    Ingredient(id = "salt_choux", name = "Соль", base = 2.0, unit = "г")
+                    Ingredient(id = "pork_meat", name = "Свинина (шея или лопатка)", base = 600.0, unit = "г", isBase = true),
+                    Ingredient(id = "onion_roast", name = "Лук репчатый", base = 150.0, unit = "г"),
+                    Ingredient(id = "oil_roast", name = "Масло растительное", base = 40.0, unit = "мл")
                 )
             ),
             IngredientGroup(
-                id = "cream_filling",
-                label = "Сливочный крем",
-                icon = Icons.Filled.DinnerDining,
+                id = "veggies_roast",
+                label = "Овощи",
+                icon = Icons.Filled.SoupKitchen,
                 color = NavesColors.basil,
                 items = listOf(
-                    Ingredient(id = "cream", name = "Сливки (33%)", base = 500.0, unit = "мл"),
-                    Ingredient(id = "sugar_powder", name = "Сахарная пудра", base = 100.0, unit = "г"),
-                    Ingredient(id = "vanilla", name = "Ванильный сахар", base = 10.0, unit = "г", fixed = true)
+                    Ingredient(id = "potatoes", name = "Картофель", base = 800.0, unit = "г"),
+                    Ingredient(id = "carrot_roast", name = "Морковь", base = 150.0, unit = "г"),
+                    Ingredient(id = "garlic_roast", name = "Чеснок", base = 3.0, unit = "зубчика", fixed = true)
+                )
+            ),
+            IngredientGroup(
+                id = "flavor_roast",
+                label = "Вкус и аромат",
+                icon = Icons.Filled.LocalFireDepartment,
+                color = NavesColors.honey,
+                items = listOf(
+                    Ingredient(id = "water_roast", name = "Вода или бульон", base = 400.0, unit = "мл"),
+                    Ingredient(id = "salt_roast", name = "Соль", base = 10.0, unit = "г"),
+                    Ingredient(id = "pepper_roast", name = "Черный перец молотый", base = 2.0, unit = "г"),
+                    Ingredient(id = "bay_roast", name = "Лавровый лист", base = 2.0, unit = "шт", fixed = true)
                 )
             )
         ),
         steps = listOf(
             CookingStep(
-                title = "Заварить тесто",
-                text = "В сотейник влить воду, добавить масло и соль. Довести до кипения. Всыпать всю муку разом и интенсивно мешать лопаткой, пока тесто не соберется в ком и на дне не появится налет."
+                title = "Подготовить мясо",
+                text = "Свинину нарезать средними кубиками (3-4 см). Лук нарезать полукольцами, морковь — кружочками или крупными кусками."
             ),
             CookingStep(
-                title = "Добавить яйца",
-                text = "Снять с огня, дать немного остыть. Вводить яйца по одному, каждый раз тщательно вымешивая до однородности. Тесто должно стать гладким и медленно стекать с лопатки."
+                title = "Обжарить мясо",
+                text = "В глубокой сковороде или казане разогреть масло. Обжарить свинину до золотистой корочки на сильном огне."
             ),
             CookingStep(
-                title = "Отсадить профитроли",
-                text = "С помощью кондитерского мешка или ложки выложить небольшие шарики на противень с пергаментом на расстоянии 3-4 см друг от друга."
+                title = "Добавить овощи",
+                text = "К мясу добавить лук и морковь. Жарить еще 7-10 минут, периодически помешивая, пока овощи не станут мягкими."
             ),
             CookingStep(
-                title = "Выпечь",
-                text = "Выпекать в разогретой до 200°C духовке 10-15 минут, затем снизить до 180°C и печь еще 15-20 минут до золотистого цвета. Не открывать духовку во время процесса!"
+                title = "Подготовить картофель",
+                text = "Картофель очистить и нарезать крупными дольками или кубиками."
             ),
             CookingStep(
-                title = "Приготовить крем",
-                text = "Холодные сливки взбить с сахарной пудрой и ванилью до крепких пиков."
+                title = "Тушить",
+                text = "Добавить картофель к мясу с овощами. Влить горячую воду (или бульон) так, чтобы она почти полностью покрывала содержимое. Добавить соль, перец и лавровый лист."
             ),
             CookingStep(
-                title = "Начинить",
-                text = "У остывших профитролей сделать небольшой надрез или прокол. С помощью кондитерского мешка наполнить их кремом."
+                title = "Томить",
+                text = "Накрыть крышкой и тушить на медленном огне 30-40 минут до готовности картофеля. За 5 минут до конца добавить мелко нарезанный чеснок."
+            ),
+            CookingStep(
+                title = "Подавать",
+                text = "Дать настояться 5-10 минут под крышкой. Подавать, посыпав свежей зеленью."
             )
         )
     )
