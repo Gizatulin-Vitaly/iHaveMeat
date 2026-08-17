@@ -13,13 +13,10 @@ import java.net.URL
 
 class UpdateManager(private val context: Context) {
 
-    /**
-     * Проверка обновлений через GitHub Releases API.
-     */
     fun checkForUpdates(
         repoPath: String,
         currentVersionName: String,
-        onUpdateAvailable: (versionName: String, releaseUrl: String) -> Unit,
+        onUpdateAvailable: (versionName: String, downloadUrl: String) -> Unit,
         onNoUpdate: () -> Unit,
         onError: (Exception) -> Unit
     ) {
@@ -29,18 +26,28 @@ class UpdateManager(private val context: Context) {
                     val url = URL("https://api.github.com/repos/$repoPath/releases/latest")
                     val connection = url.openConnection() as HttpURLConnection
                     connection.connectTimeout = 5000
-                    connection.readTimeout = 5000
                     
                     if (connection.responseCode == 200) {
                         val response = connection.inputStream.bufferedReader().use { it.readText() }
                         val json = JSONObject(response)
-                        
                         val latestTag = json.getString("tag_name")
-                        val releaseUrl = json.getString("html_url") // Ссылка на страницу релиза
+                        
+                        // Ищем прямую ссылку на APK в ассетах
+                        val assets = json.getJSONArray("assets")
+                        var apkUrl: String? = null
+                        for (i in 0 until assets.length()) {
+                            val asset = assets.getJSONObject(i)
+                            if (asset.getString("name").endsWith(".apk")) {
+                                apkUrl = asset.getString("browser_download_url")
+                                break
+                            }
+                        }
 
-                        // Сравниваем версии
+                        // Если не нашли APK, берем ссылку на страницу релиза
+                        val finalUrl = apkUrl ?: json.getString("html_url")
+
                         if (isNewerVersion(latestTag, currentVersionName)) {
-                            UpdateResult.Available(latestTag, releaseUrl)
+                            UpdateResult.Available(latestTag, finalUrl)
                         } else {
                             UpdateResult.NoUpdate
                         }
@@ -50,10 +57,9 @@ class UpdateManager(private val context: Context) {
                 }
 
                 when (result) {
-                    is UpdateResult.Available -> onUpdateAvailable(result.versionName, result.releaseUrl)
+                    is UpdateResult.Available -> onUpdateAvailable(result.versionName, result.downloadUrl)
                     is UpdateResult.NoUpdate -> onNoUpdate()
                 }
-
             } catch (e: Exception) {
                 onError(e)
             }
@@ -67,22 +73,16 @@ class UpdateManager(private val context: Context) {
     }
 
     private sealed class UpdateResult {
-        data class Available(val versionName: String, val releaseUrl: String) : UpdateResult()
+        data class Available(val versionName: String, val downloadUrl: String) : UpdateResult()
         object NoUpdate : UpdateResult()
     }
 
-    /**
-     * Просто открывает страницу релиза в браузере.
-     * Это безопасно и не блокируется Google Play.
-     */
-    fun openUpdatePage(url: String) {
+    fun openUpdate(url: String) {
         try {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
             context.startActivity(intent)
-        } catch (e: Exception) {
-            // Игнорируем или логируем
-        }
+        } catch (e: Exception) { }
     }
 }

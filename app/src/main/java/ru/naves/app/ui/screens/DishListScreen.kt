@@ -73,10 +73,10 @@ fun DishListScreen(onSelect: (String) -> Unit) {
             },
             confirmButton = {
                 TextButton(onClick = {
-                    updateManager.openUpdatePage(updateInfo!!.apkUrl)
+                    updateManager.openUpdate(updateInfo!!.apkUrl)
                     updateInfo = null
                 }) {
-                    Text("ОТКРЫТЬ", color = NavesColors.tomato, fontWeight = FontWeight.Bold)
+                    Text("СКАЧАТЬ", color = NavesColors.tomato, fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
