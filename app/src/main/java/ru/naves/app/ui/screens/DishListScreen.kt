@@ -1,5 +1,6 @@
 package ru.naves.app.ui.screens
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -24,6 +25,7 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.LunchDining
 import androidx.compose.material.icons.filled.RestaurantMenu
 import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Update
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
@@ -71,10 +73,10 @@ fun DishListScreen(onSelect: (String) -> Unit) {
             },
             confirmButton = {
                 TextButton(onClick = {
-                    updateManager.downloadAndInstall(updateInfo!!.apkUrl)
+                    updateManager.openUpdatePage(updateInfo!!.apkUrl)
                     updateInfo = null
                 }) {
-                    Text("ОБНОВИТЬ", color = NavesColors.tomato, fontWeight = FontWeight.Bold)
+                    Text("ОТКРЫТЬ", color = NavesColors.tomato, fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
@@ -117,41 +119,63 @@ fun DishListScreen(onSelect: (String) -> Unit) {
                         )
                     }
 
-                    if (isChecking) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(20.dp),
-                            color = NavesColors.tomato,
-                            strokeWidth = 2.dp
-                        )
-                    } else {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
                         IconButton(
                             onClick = {
-                                isChecking = true
-                                updateManager.checkForUpdates(
-                                    repoPath = "Gizatulin-Vitaly/iHaveMeat", 
-                                    currentVersionCode = 2,
-                                    onUpdateAvailable = { name, url ->
-                                        isChecking = false
-                                        updateInfo = UpdateInfo(name, url)
-                                    },
-                                    onNoUpdate = {
-                                        isChecking = false
-                                        android.widget.Toast.makeText(context, "У вас последняя версия", android.widget.Toast.LENGTH_SHORT).show()
-                                    },
-                                    onError = {
-                                        isChecking = false
-                                        android.widget.Toast.makeText(context, "Ошибка сети", android.widget.Toast.LENGTH_SHORT).show()
-                                    }
-                                )
+                                val sendIntent: Intent = Intent().apply {
+                                    action = Intent.ACTION_SEND
+                                    putExtra(Intent.EXTRA_TEXT, "Скачай приложение I Have Meat для идеальных пропорций в готовке! https://github.com/Gizatulin-Vitaly/iHaveMeat")
+                                    type = "text/plain"
+                                }
+                                val shareIntent = Intent.createChooser(sendIntent, null)
+                                context.startActivity(shareIntent)
                             },
                             modifier = Modifier.size(24.dp)
                         ) {
                             Icon(
-                                Icons.Filled.Update,
-                                contentDescription = "Проверить обновления",
+                                Icons.Filled.Share,
+                                contentDescription = "Поделиться",
                                 tint = NavesColors.dim,
                                 modifier = Modifier.size(20.dp)
                             )
+                        }
+                        Spacer(Modifier.width(8.dp))
+                        if (isChecking) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(20.dp),
+                                color = NavesColors.tomato,
+                                strokeWidth = 2.dp
+                            )
+                        } else {
+                            IconButton(
+                                onClick = {
+                                    isChecking = true
+                                    updateManager.checkForUpdates(
+                                        repoPath = "Gizatulin-Vitaly/iHaveMeat", 
+                                        currentVersionName = "1.2",
+                                        onUpdateAvailable = { name, url ->
+                                            isChecking = false
+                                            updateInfo = UpdateInfo(name, url)
+                                        },
+                                        onNoUpdate = {
+                                            isChecking = false
+                                            android.widget.Toast.makeText(context, "У вас последняя версия", android.widget.Toast.LENGTH_SHORT).show()
+                                        },
+                                        onError = {
+                                            isChecking = false
+                                            android.widget.Toast.makeText(context, "Ошибка сети", android.widget.Toast.LENGTH_SHORT).show()
+                                        }
+                                    )
+                                },
+                                modifier = Modifier.size(24.dp)
+                            ) {
+                                Icon(
+                                    Icons.Filled.Update,
+                                    contentDescription = "Проверить обновления",
+                                    tint = NavesColors.dim,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                            }
                         }
                     }
                 }
