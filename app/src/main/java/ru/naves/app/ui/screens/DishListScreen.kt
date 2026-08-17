@@ -124,7 +124,7 @@ fun DishListScreen(onSelect: (String) -> Unit) {
                             onClick = {
                                 val sendIntent: Intent = Intent().apply {
                                     action = Intent.ACTION_SEND
-                                    putExtra(Intent.EXTRA_TEXT, "Скачай приложение I Have Meat для идеальных пропорций в готовке! https://github.com/Gizatulin-Vitaly/iHaveMeat")
+                                    putExtra(Intent.EXTRA_TEXT, "Скачай приложение I Have Meat для идеальных пропорций в готовке! Прямая ссылка на APK: https://github.com/Gizatulin-Vitaly/iHaveMeat/releases/latest/download/app-debug.apk")
                                     type = "text/plain"
                                 }
                                 val shareIntent = Intent.createChooser(sendIntent, null)
