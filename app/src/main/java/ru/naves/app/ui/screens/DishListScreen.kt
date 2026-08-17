@@ -73,10 +73,10 @@ fun DishListScreen(onSelect: (String) -> Unit) {
             },
             confirmButton = {
                 TextButton(onClick = {
-                    updateManager.openUpdate(updateInfo!!.apkUrl)
+                    updateManager.downloadAndInstall(updateInfo!!.apkUrl)
                     updateInfo = null
                 }) {
-                    Text("СКАЧАТЬ", color = NavesColors.tomato, fontWeight = FontWeight.Bold)
+                    Text("ОБНОВИТЬ", color = NavesColors.tomato, fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
@@ -152,7 +152,7 @@ fun DishListScreen(onSelect: (String) -> Unit) {
                                     isChecking = true
                                     updateManager.checkForUpdates(
                                         repoPath = "Gizatulin-Vitaly/iHaveMeat", 
-                                        currentVersionName = "1.2",
+                                        currentVersionName = "1.0.5",
                                         onUpdateAvailable = { name, url ->
                                             isChecking = false
                                             updateInfo = UpdateInfo(name, url)

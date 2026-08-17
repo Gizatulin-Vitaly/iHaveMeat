@@ -282,5 +282,65 @@ val recipes: List<Recipe> = listOf(
                 text = "На большое подогретое блюдо выложить сваренное тесто, сверху распределить мясо. Полить всё горячим туздыком (луком с бульоном) и посыпать свежей зеленью."
             )
         )
+    ),
+    Recipe(
+        id = "profiteroles",
+        name = "Профитроли",
+        subtitle = "Нежные пирожные со сливочным кремом",
+        time = "60 мин",
+        baseServings = 20,
+        baseMince = 250.0, // Base is water amount for dough scaling
+        groups = listOf(
+            IngredientGroup(
+                id = "choux_pastry",
+                label = "Заварное тесто",
+                icon = Icons.Filled.BakeryDining,
+                color = NavesColors.honey,
+                items = listOf(
+                    Ingredient(id = "water_choux", name = "Вода", base = 250.0, unit = "мл", isBase = true),
+                    Ingredient(id = "butter", name = "Сливочное масло", base = 100.0, unit = "г"),
+                    Ingredient(id = "flour_choux", name = "Мука пшеничная", base = 150.0, unit = "г"),
+                    Ingredient(id = "eggs", name = "Яйца", base = 4.0, unit = "шт", fixed = true),
+                    Ingredient(id = "salt_choux", name = "Соль", base = 2.0, unit = "г")
+                )
+            ),
+            IngredientGroup(
+                id = "cream_filling",
+                label = "Сливочный крем",
+                icon = Icons.Filled.DinnerDining,
+                color = NavesColors.basil,
+                items = listOf(
+                    Ingredient(id = "cream", name = "Сливки (33%)", base = 500.0, unit = "мл"),
+                    Ingredient(id = "sugar_powder", name = "Сахарная пудра", base = 100.0, unit = "г"),
+                    Ingredient(id = "vanilla", name = "Ванильный сахар", base = 10.0, unit = "г", fixed = true)
+                )
+            )
+        ),
+        steps = listOf(
+            CookingStep(
+                title = "Заварить тесто",
+                text = "В сотейник влить воду, добавить масло и соль. Довести до кипения. Всыпать всю муку разом и интенсивно мешать лопаткой, пока тесто не соберется в ком и на дне не появится налет."
+            ),
+            CookingStep(
+                title = "Добавить яйца",
+                text = "Снять с огня, дать немного остыть. Вводить яйца по одному, каждый раз тщательно вымешивая до однородности. Тесто должно стать гладким и медленно стекать с лопатки."
+            ),
+            CookingStep(
+                title = "Отсадить профитроли",
+                text = "С помощью кондитерского мешка или ложки выложить небольшие шарики на противень с пергаментом на расстоянии 3-4 см друг от друга."
+            ),
+            CookingStep(
+                title = "Выпечь",
+                text = "Выпекать в разогретой до 200°C духовке 10-15 минут, затем снизить до 180°C и печь еще 15-20 минут до золотистого цвета. Не открывать духовку во время процесса!"
+            ),
+            CookingStep(
+                title = "Приготовить крем",
+                text = "Холодные сливки взбить с сахарной пудрой и ванилью до крепких пиков."
+            ),
+            CookingStep(
+                title = "Начинить",
+                text = "У остывших профитролей сделать небольшой надрез или прокол. С помощью кондитерского мешка наполнить их кремом."
+            )
+        )
     )
 )

@@ -1,13 +1,21 @@
 package ru.naves.app
 
+import android.app.DownloadManager
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.net.Uri
+import android.os.Environment
+import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -16,7 +24,7 @@ class UpdateManager(private val context: Context) {
     fun checkForUpdates(
         repoPath: String,
         currentVersionName: String,
-        onUpdateAvailable: (versionName: String, downloadUrl: String) -> Unit,
+        onUpdateAvailable: (versionName: String, apkUrl: String) -> Unit,
         onNoUpdate: () -> Unit,
         onError: (Exception) -> Unit
     ) {
@@ -32,7 +40,6 @@ class UpdateManager(private val context: Context) {
                         val json = JSONObject(response)
                         val latestTag = json.getString("tag_name")
                         
-                        // Ищем прямую ссылку на APK в ассетах
                         val assets = json.getJSONArray("assets")
                         var apkUrl: String? = null
                         for (i in 0 until assets.length()) {
@@ -43,11 +50,8 @@ class UpdateManager(private val context: Context) {
                             }
                         }
 
-                        // Если не нашли APK, берем ссылку на страницу релиза
-                        val finalUrl = apkUrl ?: json.getString("html_url")
-
-                        if (isNewerVersion(latestTag, currentVersionName)) {
-                            UpdateResult.Available(latestTag, finalUrl)
+                        if (apkUrl != null && isNewerVersion(latestTag, currentVersionName)) {
+                            UpdateResult.Available(latestTag, apkUrl)
                         } else {
                             UpdateResult.NoUpdate
                         }
@@ -57,7 +61,7 @@ class UpdateManager(private val context: Context) {
                 }
 
                 when (result) {
-                    is UpdateResult.Available -> onUpdateAvailable(result.versionName, result.downloadUrl)
+                    is UpdateResult.Available -> onUpdateAvailable(result.versionName, result.apkUrl)
                     is UpdateResult.NoUpdate -> onNoUpdate()
                 }
             } catch (e: Exception) {
@@ -73,16 +77,53 @@ class UpdateManager(private val context: Context) {
     }
 
     private sealed class UpdateResult {
-        data class Available(val versionName: String, val downloadUrl: String) : UpdateResult()
+        data class Available(val versionName: String, val apkUrl: String) : UpdateResult()
         object NoUpdate : UpdateResult()
     }
 
-    fun openUpdate(url: String) {
-        try {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    fun downloadAndInstall(apkUrl: String) {
+        val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val destination = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "update.apk")
+        
+        if (destination.exists()) destination.delete()
+
+        val request = DownloadManager.Request(Uri.parse(apkUrl))
+            .setTitle("Обновление I have meat")
+            .setDescription("Загрузка новой версии...")
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            .setDestinationUri(Uri.fromFile(destination))
+
+        val downloadId = downloadManager.enqueue(request)
+        Toast.makeText(context, "Загрузка началась...", Toast.LENGTH_SHORT).show()
+
+        val onComplete = object : BroadcastReceiver() {
+            override fun onReceive(ctxt: Context, intent: Intent) {
+                val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
+                if (id == downloadId) {
+                    installApk(destination)
+                    context.unregisterReceiver(this)
+                }
             }
+        }
+        
+        ContextCompat.registerReceiver(
+            context, onComplete, 
+            IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE), 
+            ContextCompat.RECEIVER_EXPORTED
+        )
+    }
+
+    private fun installApk(file: File) {
+        val uri = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            setDataAndType(uri, "application/vnd.android.package-archive")
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        try {
             context.startActivity(intent)
-        } catch (e: Exception) { }
+        } catch (e: Exception) {
+            Toast.makeText(context, "Ошибка установки: ${e.message}", Toast.LENGTH_LONG).show()
+        }
     }
 }
