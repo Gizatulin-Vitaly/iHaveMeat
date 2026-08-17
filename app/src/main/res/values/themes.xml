@@ -1,0 +1,11 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Theme.NaVes" parent="android:Theme.Material.NoActionBar" />
+
+    <!-- Splash Screen theme. -->
+    <style name="Theme.NaVes.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash</item>
+        <item name="windowSplashScreenBackground">#FEF9F3</item> <!-- NavesColors.appBg -->
+        <item name="postSplashScreenTheme">@style/Theme.NaVes</item>
+    </style>
+</resources>
