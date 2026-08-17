@@ -24,25 +24,69 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.LunchDining
 import androidx.compose.material.icons.filled.RestaurantMenu
 import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material.icons.filled.Update
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.naves.app.UpdateManager
 import ru.naves.app.data.Recipe
 import ru.naves.app.data.recipes
 import ru.naves.app.ui.theme.NavesColors
 
-private val comingSoon = listOf("Плов", "Пельмени", "Хачапури")
+data class UpdateInfo(val versionName: String, val apkUrl: String)
 
 @Composable
 fun DishListScreen(onSelect: (String) -> Unit) {
+    val context = LocalContext.current
+    val updateManager = remember { UpdateManager(context) }
+    var updateInfo by remember { mutableStateOf<UpdateInfo?>(null) }
+    var isChecking by remember { mutableStateOf(false) }
+
+    if (updateInfo != null) {
+        AlertDialog(
+            onDismissRequest = { updateInfo = null },
+            title = { Text("Обновление", color = NavesColors.text) },
+            text = { 
+                Text(
+                    "Доступна новая версия ${updateInfo?.versionName}. Рекомендуем обновиться для получения новых рецептов и функций.",
+                    color = NavesColors.dim
+                ) 
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    updateManager.downloadAndInstall(updateInfo!!.apkUrl)
+                    updateInfo = null
+                }) {
+                    Text("ОБНОВИТЬ", color = NavesColors.tomato, fontWeight = FontWeight.Bold)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { updateInfo = null }) {
+                    Text("ПОЗЖЕ", color = NavesColors.dim)
+                }
+            },
+            containerColor = NavesColors.surface2,
+            shape = RoundedCornerShape(24.dp)
+        )
+    }
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -54,21 +98,62 @@ fun DishListScreen(onSelect: (String) -> Unit) {
             Column(modifier = Modifier.padding(bottom = 32.dp)) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(bottom = 12.dp)
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Icon(
-                        Icons.Filled.RestaurantMenu,
-                        contentDescription = null,
-                        tint = NavesColors.tomato,
-                        modifier = Modifier.size(20.dp)
-                    )
-                    Spacer(Modifier.width(10.dp))
-                    Text(
-                        "I HAVE MEAT",
-                        color = NavesColors.dim,
-                        style = MaterialTheme.typography.labelSmall,
-                        letterSpacing = 2.sp
-                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.Filled.RestaurantMenu,
+                            contentDescription = null,
+                            tint = NavesColors.tomato,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(Modifier.width(10.dp))
+                        Text(
+                            "I HAVE MEAT",
+                            color = NavesColors.dim,
+                            style = MaterialTheme.typography.labelSmall,
+                            letterSpacing = 2.sp
+                        )
+                    }
+
+                    if (isChecking) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(20.dp),
+                            color = NavesColors.tomato,
+                            strokeWidth = 2.dp
+                        )
+                    } else {
+                        IconButton(
+                            onClick = {
+                                isChecking = true
+                                updateManager.checkForUpdates(
+                                    repoPath = "Gizatulin-Vitaly/iHaveMeat", 
+                                    currentVersionCode = 2,
+                                    onUpdateAvailable = { name, url ->
+                                        isChecking = false
+                                        updateInfo = UpdateInfo(name, url)
+                                    },
+                                    onNoUpdate = {
+                                        isChecking = false
+                                        android.widget.Toast.makeText(context, "У вас последняя версия", android.widget.Toast.LENGTH_SHORT).show()
+                                    },
+                                    onError = {
+                                        isChecking = false
+                                        android.widget.Toast.makeText(context, "Ошибка сети", android.widget.Toast.LENGTH_SHORT).show()
+                                    }
+                                )
+                            },
+                            modifier = Modifier.size(24.dp)
+                        ) {
+                            Icon(
+                                Icons.Filled.Update,
+                                contentDescription = "Проверить обновления",
+                                tint = NavesColors.dim,
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                    }
                 }
                 Text(
                     text = "Что готовим\nсегодня?",
@@ -78,7 +163,7 @@ fun DishListScreen(onSelect: (String) -> Unit) {
                 )
                 Spacer(Modifier.height(12.dp))
                 Text(
-                    text = "Укажите количество фарша — мы рассчитаем идеальные пропорции остальных ингредиентов.",
+                    text = "Укажите количество мяса — мы рассчитаем идеальные пропорции остальных ингредиентов.",
                     color = NavesColors.dim,
                     style = MaterialTheme.typography.bodyMedium,
                     lineHeight = 20.sp
@@ -92,19 +177,27 @@ fun DishListScreen(onSelect: (String) -> Unit) {
         }
 
         item {
-            Spacer(Modifier.height(24.dp))
-            Text(
-                "СКОРО В МЕНЮ",
-                color = NavesColors.dim,
-                style = MaterialTheme.typography.labelMedium,
-                letterSpacing = 1.5.sp,
-                modifier = Modifier.padding(bottom = 16.dp, start = 4.dp)
-            )
-        }
-
-        items(comingSoon) { name ->
-            ComingSoonCard(name)
-            Spacer(Modifier.height(12.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 32.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Будут добавляться новые рецепты,\nне забывайте обновлять приложение\nкнопкой в правом верхнем углу!",
+                    color = NavesColors.dim.copy(alpha = 0.7f),
+                    style = MaterialTheme.typography.labelMedium,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                    lineHeight = 18.sp
+                )
+                Spacer(Modifier.height(16.dp))
+                Icon(
+                    Icons.Filled.Update,
+                    contentDescription = null,
+                    tint = NavesColors.dim.copy(alpha = 0.4f),
+                    modifier = Modifier.size(24.dp)
+                )
+            }
         }
     }
 }
@@ -177,39 +270,5 @@ private fun DishCard(recipe: Recipe, onClick: () -> Unit) {
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun ComingSoonCard(name: String) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(20.dp))
-            .background(NavesColors.surface2.copy(alpha = 0.5f))
-            .border(1.dp, NavesColors.line.copy(alpha = 0.8f), RoundedCornerShape(20.dp))
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(
-            modifier = Modifier
-                .size(44.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .background(NavesColors.appBg.copy(alpha = 0.5f)),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                Icons.Filled.Lock,
-                contentDescription = null,
-                tint = NavesColors.dim.copy(alpha = 0.5f),
-                modifier = Modifier.size(18.dp)
-            )
-        }
-        Spacer(Modifier.width(16.dp))
-        Text(
-            text = name,
-            color = NavesColors.dim.copy(alpha = 0.7f),
-            style = MaterialTheme.typography.titleMedium
-        )
     }
 }

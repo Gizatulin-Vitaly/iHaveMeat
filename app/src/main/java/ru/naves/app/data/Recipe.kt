@@ -2,6 +2,7 @@ package ru.naves.app.data
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BakeryDining
+import androidx.compose.material.icons.filled.DinnerDining
 import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material.icons.filled.LunchDining
 import androidx.compose.material.icons.filled.RiceBowl
@@ -208,6 +209,77 @@ val recipes: List<Recipe> = listOf(
             CookingStep(
                 title = "Настоять и подавать",
                 text = "Выключить огонь, дать плову настояться под крышкой ещё 10–15 минут. Перед подачей аккуратно извлечь чеснок и перец, перемешать рис с зирваком (мясом и морковью)."
+            )
+        )
+    ),
+    Recipe(
+        id = "beshbarmak",
+        name = "Бешбармак из говядины",
+        subtitle = "Традиционное блюдо с домашней лапшой",
+        time = "120 мин",
+        baseServings = 6,
+        baseMince = 1000.0,
+        groups = listOf(
+            IngredientGroup(
+                id = "meat_broth",
+                label = "Мясо и бульон",
+                icon = Icons.Filled.LunchDining,
+                color = NavesColors.tomato,
+                items = listOf(
+                    Ingredient(id = "beef_besh", name = "Говядина (на кости)", base = 1000.0, unit = "г", isBase = true),
+                    Ingredient(id = "onion_broth", name = "Лук (в бульон)", base = 100.0, unit = "г"),
+                    Ingredient(id = "bay_leaf", name = "Лавровый лист", base = 2.0, unit = "шт", fixed = true),
+                    Ingredient(id = "pepper_besh", name = "Черный перец горошком", base = 5.0, unit = "шт", fixed = true),
+                    Ingredient(id = "salt_besh", name = "Соль", base = 15.0, unit = "г")
+                )
+            ),
+            IngredientGroup(
+                id = "dough_besh",
+                label = "Тесто (сочни)",
+                icon = Icons.Filled.BakeryDining,
+                color = NavesColors.basil,
+                items = listOf(
+                    Ingredient(id = "flour_besh", name = "Мука пшеничная", base = 400.0, unit = "г"),
+                    Ingredient(id = "egg_besh", name = "Яйцо", base = 1.0, unit = "шт", fixed = true),
+                    Ingredient(id = "water_besh", name = "Бульон или вода", base = 100.0, unit = "мл")
+                )
+            ),
+            IngredientGroup(
+                id = "uzuk",
+                label = "Туздык (соус)",
+                icon = Icons.Filled.DinnerDining,
+                color = NavesColors.honey,
+                items = listOf(
+                    Ingredient(id = "onion_main", name = "Лук репчатый", base = 300.0, unit = "г"),
+                    Ingredient(id = "pepper_ground", name = "Черный перец молотый", base = 2.0, unit = "г"),
+                    Ingredient(id = "greens", name = "Зелень (петрушка, укроп)", base = 20.0, unit = "г")
+                )
+            )
+        ),
+        steps = listOf(
+            CookingStep(
+                title = "Сварить мясо",
+                text = "Мясо залить холодной водой, довести до кипения, тщательно снять пену. Добавить луковицу, перец горошком, лавровый лист. Варить на медленном огне 2–2.5 часа до мягкости мяса."
+            ),
+            CookingStep(
+                title = "Замесить тесто",
+                text = "Из муки, яйца, соли и остывшего бульона (или воды) замесить крутое тесто. Оставить отдохнуть на 30 минут."
+            ),
+            CookingStep(
+                title = "Раскатать сочни",
+                text = "Раскатать тесто в тонкий пласт (1 мм) и нарезать ромбами примерно 8x8 см. Дать им немного подсохнуть на столе."
+            ),
+            CookingStep(
+                title = "Приготовить туздык",
+                text = "Лук нарезать тонкими кольцами, выложить в небольшую кастрюлю, посыпать перцем. Залить жирным верхним слоем горячего бульона и потомить на огне 2–3 минуты (лук должен стать мягким, но сохранить форму)."
+            ),
+            CookingStep(
+                title = "Сварить тесто",
+                text = "Готовое мясо вынуть, нарезать крупными кусками. В кипящем бульоне порциями отварить ромбы теста (сочни) в течение 3–5 минут."
+            ),
+            CookingStep(
+                title = "Собрать блюдо",
+                text = "На большое подогретое блюдо выложить сваренное тесто, сверху распределить мясо. Полить всё горячим туздыком (луком с бульоном) и посыпать свежей зеленью."
             )
         )
     )
