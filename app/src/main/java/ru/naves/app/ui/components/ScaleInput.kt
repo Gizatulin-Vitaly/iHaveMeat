@@ -62,7 +62,7 @@ fun ScaleInput(
             )
             Spacer(Modifier.width(8.dp))
             Text(
-                text = "СКОЛЬКО У ВАС ФАРША",
+                text = "СКОЛЬКО У ВАС МЯСА",
                 color = NavesColors.dim,
                 style = MaterialTheme.typography.labelMedium,
                 letterSpacing = 1.2.sp,

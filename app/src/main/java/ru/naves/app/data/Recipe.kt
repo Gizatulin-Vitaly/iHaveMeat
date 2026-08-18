@@ -356,5 +356,259 @@ val recipes: List<Recipe> = listOf(
                 text = "Дать настояться 5-10 минут под крышкой. Подавать, посыпав свежей зеленью."
             )
         )
+    ),
+    Recipe(
+        id = "lagman",
+        name = "Лагман",
+        subtitle = "Густой суп с домашней лапшой и овощами",
+        time = "80 мин",
+        baseServings = 6,
+        baseMince = 600.0,
+        groups = listOf(
+            IngredientGroup(
+                id = "meat_lagman",
+                label = "Мясо и база",
+                icon = Icons.Filled.LunchDining,
+                color = NavesColors.tomato,
+                items = listOf(
+                    Ingredient(id = "beef_lagman", name = "Говядина", base = 600.0, unit = "г", isBase = true),
+                    Ingredient(id = "oil_lagman", name = "Масло растительное", base = 100.0, unit = "мл"),
+                    Ingredient(id = "onion_lagman", name = "Лук репчатый", base = 200.0, unit = "г")
+                )
+            ),
+            IngredientGroup(
+                id = "veggies_lagman",
+                label = "Овощная подлива (Ваджа)",
+                icon = Icons.Filled.SoupKitchen,
+                color = NavesColors.basil,
+                items = listOf(
+                    Ingredient(id = "pepper_lagman", name = "Перец болгарский", base = 200.0, unit = "г"),
+                    Ingredient(id = "radish_lagman", name = "Редька (или дайкон)", base = 150.0, unit = "г"),
+                    Ingredient(id = "tomato_lagman", name = "Помидоры", base = 200.0, unit = "г"),
+                    Ingredient(id = "potato_lagman", name = "Картофель (по желанию)", base = 200.0, unit = "г"),
+                    Ingredient(id = "garlic_lagman", name = "Чеснок", base = 4.0, unit = "зубчика", fixed = true)
+                )
+            ),
+            IngredientGroup(
+                id = "spices_lagman",
+                label = "Специи и лапша",
+                icon = Icons.Filled.LocalFireDepartment,
+                color = NavesColors.honey,
+                items = listOf(
+                    Ingredient(id = "noodles", name = "Лапша для лагмана", base = 500.0, unit = "г"),
+                    Ingredient(id = "zira_lagman", name = "Зира", base = 3.0, unit = "г"),
+                    Ingredient(id = "badyan", name = "Бадьян", base = 1.0, unit = "звездочка", fixed = true),
+                    Ingredient(id = "salt_lagman", name = "Соль", base = 12.0, unit = "г")
+                )
+            )
+        ),
+        steps = listOf(
+            CookingStep(
+                title = "Подготовить мясо и овощи",
+                text = "Мясо нарезать небольшими кубиками. Лук — полукольцами, морковь, редьку и перец — мелкой соломкой. Помидоры очистить от кожицы и мелко нарубить."
+            ),
+            CookingStep(
+                title = "Обжарить базу",
+                text = "В казане сильно разогреть масло. Обжарить мясо до румяной корочки. Добавить лук, жарить до золотистого цвета."
+            ),
+            CookingStep(
+                title = "Тушить овощи",
+                text = "Поочередно добавлять морковь, редьку, болгарский перец и помидоры. Жарить всё вместе 10–12 минут на сильном огне."
+            ),
+            CookingStep(
+                title = "Приготовить подливу",
+                text = "Влить горячую воду (или бульон), чтобы она покрыла овощи на 2–3 см. Добавить измельченный чеснок, зиру, бадьян и соль. Томить на медленном огне 30 минут."
+            ),
+            CookingStep(
+                title = "Сварить лапшу",
+                text = "Лапшу отварить в подсоленной воде до готовности. Откинуть на дуршлаг и промыть горячей водой."
+            ),
+            CookingStep(
+                title = "Подача",
+                text = "В глубокую тарелку (кесе) выложить порцию лапши, залить горячей овощной подливой с мясом. Посыпать свежей кинзой или укропом."
+            )
+        )
+    ),
+    Recipe(
+        id = "carbonara",
+        name = "Карбонара с беконом",
+        subtitle = "Итальянская классика с нежным соусом",
+        time = "20 мин",
+        baseServings = 2,
+        baseMince = 200.0,
+        groups = listOf(
+            IngredientGroup(
+                id = "pasta_base",
+                label = "Паста",
+                icon = Icons.Filled.BakeryDining,
+                color = NavesColors.honey,
+                items = listOf(
+                    Ingredient(id = "spaghetti", name = "Спагетти", base = 250.0, unit = "г"),
+                    Ingredient(id = "salt_pasta", name = "Соль (для воды)", base = 10.0, unit = "г", fixed = true)
+                )
+            ),
+            IngredientGroup(
+                id = "sauce_meat",
+                label = "Соус и мясо",
+                icon = Icons.Filled.LunchDining,
+                color = NavesColors.tomato,
+                items = listOf(
+                    Ingredient(id = "bacon", name = "Бекон", base = 200.0, unit = "г", isBase = true),
+                    Ingredient(id = "eggs_carb", name = "Яйца (желтки)", base = 3.0, unit = "шт", fixed = true),
+                    Ingredient(id = "cheese_parm", name = "Пармезан (или твердый сыр)", base = 50.0, unit = "г"),
+                    Ingredient(id = "black_pepper", name = "Черный перец (свежемолотый)", base = 2.0, unit = "г", fixed = true)
+                )
+            )
+        ),
+        steps = listOf(
+            CookingStep(
+                title = "Сварить пасту",
+                text = "Поставьте воду для пасты. Варите спагетти до состояния аль-денте (на 1-2 минуты меньше, чем указано на упаковке)."
+            ),
+            CookingStep(
+                title = "Обжарить бекон",
+                text = "Нарежьте бекон полосками. Обжарьте на сухой сковороде до золотистого цвета и хруста."
+            ),
+            CookingStep(
+                title = "Приготовить соус",
+                text = "Смешайте желтки с тертым сыром и большим количеством черного перца в отдельной миске."
+            ),
+            CookingStep(
+                title = "Соединить",
+                text = "Переложите готовую пасту в сковороду к бекону (огонь выключен!). Добавьте немного воды от пасты и яично-сырную смесь. Быстро перемешивайте, чтобы яйца не свернулись, а превратились в кремовый соус."
+            )
+        )
+    ),
+    Recipe(
+        id = "pea_soup",
+        name = "Гороховый суп",
+        subtitle = "Сытный суп с копченостями",
+        time = "100 мин",
+        baseServings = 6,
+        baseMince = 500.0,
+        groups = listOf(
+            IngredientGroup(
+                id = "soup_base",
+                label = "Основа",
+                icon = Icons.Filled.LunchDining,
+                color = NavesColors.tomato,
+                items = listOf(
+                    Ingredient(id = "smoked_ribs", name = "Копченые ребра или мясо", base = 500.0, unit = "г", isBase = true),
+                    Ingredient(id = "peas", name = "Горох сухой", base = 300.0, unit = "г", note = "замочить заранее")
+                )
+            ),
+            IngredientGroup(
+                id = "soup_veggies",
+                label = "Овощи",
+                icon = Icons.Filled.SoupKitchen,
+                color = NavesColors.basil,
+                items = listOf(
+                    Ingredient(id = "potatoes_pea", name = "Картофель", base = 400.0, unit = "г"),
+                    Ingredient(id = "onion_pea", name = "Лук репчатый", base = 100.0, unit = "г"),
+                    Ingredient(id = "carrot_pea", name = "Морковь", base = 100.0, unit = "г")
+                )
+            ),
+            IngredientGroup(
+                id = "soup_flavor",
+                label = "Вкус",
+                icon = Icons.Filled.LocalFireDepartment,
+                color = NavesColors.honey,
+                items = listOf(
+                    Ingredient(id = "salt_pea", name = "Соль", base = 8.0, unit = "г"),
+                    Ingredient(id = "pepper_pea", name = "Перец", base = 2.0, unit = "г"),
+                    Ingredient(id = "bay_pea", name = "Лавровый лист", base = 1.0, unit = "шт", fixed = true)
+                )
+            )
+        ),
+        steps = listOf(
+            CookingStep(
+                title = "Подготовка гороха",
+                text = "Горох промойте и замочите в холодной воде минимум на 2-3 часа (лучше на ночь)."
+            ),
+            CookingStep(
+                title = "Варим бульон",
+                text = "Копчености залейте водой и варите 40-50 минут. Выньте мясо, отделите от костей и нарежьте."
+            ),
+            CookingStep(
+                title = "Варим горох",
+                text = "В бульон добавьте горох и варите до его размягчения (30-60 минут в зависимости от сорта)."
+            ),
+            CookingStep(
+                title = "Добавляем картофель",
+                text = "Добавьте нарезанный кубиками картофель."
+            ),
+            CookingStep(
+                title = "Зажарка",
+                text = "Лук и морковь мелко нарежьте, обжарьте на масле до золотистого цвета и добавьте в суп."
+            ),
+            CookingStep(
+                title = "Финал",
+                text = "Верните мясо в суп, добавьте соль, перец и лавровый лист. Варите еще 5-10 минут. Подавайте с сухариками."
+            )
+        )
+    ),
+    Recipe(
+        id = "solyanka",
+        name = "Солянка мясная",
+        subtitle = "Густой, наваристый суп с кислинкой",
+        time = "60 мин",
+        baseServings = 6,
+        baseMince = 500.0,
+        groups = listOf(
+            IngredientGroup(
+                id = "sol_meats",
+                label = "Мясное ассорти",
+                icon = Icons.Filled.LunchDining,
+                color = NavesColors.tomato,
+                items = listOf(
+                    Ingredient(id = "meat_mix", name = "Мясные деликатесы (ветчина, сосиски, буженина)", base = 500.0, unit = "г", isBase = true),
+                    Ingredient(id = "beef_broth", name = "Бульон мясной", base = 2000.0, unit = "мл")
+                )
+            ),
+            IngredientGroup(
+                id = "sol_pickles",
+                label = "Для кислинки",
+                icon = Icons.Filled.SoupKitchen,
+                color = NavesColors.basil,
+                items = listOf(
+                    Ingredient(id = "pickles", name = "Огурцы соленые", base = 200.0, unit = "г"),
+                    Ingredient(id = "onion_sol", name = "Лук репчатый", base = 150.0, unit = "г"),
+                    Ingredient(id = "tomato_paste", name = "Томатная паста", base = 50.0, unit = "г"),
+                    Ingredient(id = "olives", name = "Маслины", base = 50.0, unit = "г", fixed = true)
+                )
+            ),
+            IngredientGroup(
+                id = "sol_serving",
+                label = "Подача",
+                icon = Icons.Filled.DinnerDining,
+                color = NavesColors.honey,
+                items = listOf(
+                    Ingredient(id = "lemon", name = "Лимон", base = 0.5, unit = "шт", fixed = true),
+                    Ingredient(id = "sour_cream", name = "Сметана", base = 100.0, unit = "г", fixed = true)
+                )
+            )
+        ),
+        steps = listOf(
+            CookingStep(
+                title = "Подготовка основы",
+                text = "Лук мелко нарежьте и обжарьте до прозрачности. Добавьте нарезанные соленые огурцы и томатную пасту, тушите 5-7 минут."
+            ),
+            CookingStep(
+                title = "Нарезка мяса",
+                text = "Все виды мясных продуктов нарежьте небольшими кусочками (соломкой или кубиками)."
+            ),
+            CookingStep(
+                title = "Сборка супа",
+                text = "В кипящий бульон добавьте зажарку и мясное ассорти. Варите на медленном огне 15 минут."
+            ),
+            CookingStep(
+                title = "Добавление маслин",
+                text = "Добавьте в суп маслины вместе с небольшим количеством рассола. Посолите и поперчите по вкусу."
+            ),
+            CookingStep(
+                title = "Подача",
+                text = "В каждую тарелку при подаче положите ломтик лимона, ложку сметаны и посыпьте свежей зеленью."
+            )
+        )
     )
 )
